@@ -47,4 +47,23 @@ pipeline {
             }
         }
     }
+    
+    post {
+        success {
+            emailext(
+                to: 'YOUR_GMAIL@gmail.com',
+                subject: "Jenkins SUCCESS: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                body: "Build #${env.BUILD_NUMBER} completed successfully. Check Jenkins for details."
+            )
+        }
+
+        failure {
+            emailext(
+                to: 'YOUR_GMAIL@gmail.com',
+                subject: "Jenkins FAILURE: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                body: "Build #${env.BUILD_NUMBER} failed. Please check the Jenkins console output."
+            )
+        }
+    }
+
 }
