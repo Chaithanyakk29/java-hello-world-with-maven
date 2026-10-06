@@ -1,20 +1,45 @@
-pipeline{
+
+pipeline {
     agent any
 
-    tools {
-         maven 'maven'
-         jdk 'java'
+    options {
+        skipDefaultCheckout(true)
     }
 
-    stages{
-        stage('checkout'){
-            steps{
-                checkout([$class: 'GitSCM', branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[credentialsId: 'github access', url: 'https://github.com/sreenivas449/java-hello-world-with-maven.git']]])
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
             }
         }
-        stage('build'){
-            steps{
-               bat 'mvn package'
+
+        stage('Welcome') {
+            steps {
+                echo 'Welcome! Jenkins pipeline is working.'
+            }
+        }
+
+        stage('Clean') {
+            steps {
+                bat 'mvn -B clean'
+            }
+        }
+
+        stage('Compile') {
+            steps {
+                bat 'mvn -B compile'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                bat 'mvn -B test'
+            }
+        }
+
+        stage('Package') {
+            steps {
+                bat 'mvn -B package -DskipTests'
             }
         }
     }
